@@ -2835,7 +2835,9 @@ const char *HelloDrumButton::GetSettingItem()
   }
   // avoid PlatformIO error: control reaches end of non-void function [-Werror=return-type]
   else
-  {}
+  {
+    return 0;
+  }
 }
 const char *HelloDrumButton::GetHitPad()
 {
@@ -2913,7 +2915,9 @@ const char *HelloDrumButtonLcdShield::GetSettingItem()
   }
   // avoid PlatformIO error: control reaches end of non-void function [-Werror=return-type]
   else
-  {}
+  {
+    return 0;
+  }
 }
 const char *HelloDrumButtonLcdShield::GetHitPad()
 {
