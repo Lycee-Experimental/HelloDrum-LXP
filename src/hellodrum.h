@@ -12,8 +12,12 @@
 
 #include "Arduino.h"
 
-#ifdef ESP32
+#if defined(ESP32)
 #include "EEPROM_ESP.h"
+#elif ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+#include "EEPROM_PICO.h"
+#elif defined(ARDUINO_SAMD_ZERO)
+//Include only once in hellodrum.cpp -> #include <FlashStorage_SAMD.h>
 #else
 #include "EEPROM.h"
 #endif
