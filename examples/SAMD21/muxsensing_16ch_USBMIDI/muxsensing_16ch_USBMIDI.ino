@@ -1,27 +1,21 @@
 /*
-  EXAMPLE - 16 Channel mux sensing with RP2040 boards
-  With this sample code, you will make snare and tom using two piezo.
+  EXAMPLE - Mux sensing with samd21
+
+  With this sample code, you will get a 16 channels mux working on Samd21.
   https://github.com/Lycee-Experimental/HelloDrum-LXP
   based on
   https://github.com/RyoKosaka/HelloDrum-arduino-Library
+
+  Note : install FlashStorage_SAMD to use EEPROM (not tested)
+
 */
-#include <Arduino.h>
-#include <Adafruit_TinyUSB.h>
-#include <MIDI.h>
 #include <hellodrum.h>
-
-// USB MIDI object
-Adafruit_USBD_MIDI usb_midi;
-
-// Create a new instance of the Arduino MIDI Library,
-// and attach usb_midi as the transport.
-MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usb_midi, MIDI);
 
 ///////////////////////////////   SETTING ///////////////////////////////////
 
-#define Drum_map 2 //0-ADD2, 1-EZD2, 2-DRUMGIZMO
+#define Drum_map 0 //0-ADD2, 1-EZD2
 
-byte Note[3][16] = {
+byte Note[2][16] = {
     /* _ Hihat tip
     |     _ Kick
     |    |    _ Snare Open hit
@@ -40,9 +34,7 @@ byte Note[3][16] = {
     |    |   |   |   |   |   |   |   |   |   |   |   |   |  |    _ Ride bell 
     |    |   |   |   |   |   |   |   |   |   |   |   |   |  |   |       BANK */
     {8, 36, 38, 42, 71, 69, 67, 65, 47, 96, 77, 79, 81, 89, 60, 61}, // 0 - ADD2 MAP
-    {20, 36, 38, 37, 47, 48, 41, 43, 45, 1, 55, 49, 57, 52, 51, 53},  // 1 - EZD MAP
-    {56, 36, 38, 37, 47, 43, 41, 73, 58, 61, 54, 49, 55, 57, 51, 53}  // 2 - Drumgizmo
-
+    {20, 36, 38, 37, 47, 48, 41, 43, 45, 1, 55, 49, 57, 52, 51, 53}  // 1 - EZD MAP
 };
 
 int PAD1[5] = {
@@ -159,18 +151,22 @@ int PAD16[5] = {
 
 ////////////////// DEFINITION DU MODE DE TRANSFERT MIDI //////////////////////
 
+// Le SAMD21 permet la création d'un périphérique USB MIDI
+#include <USB-MIDI.h>
+USBMIDI_CREATE_DEFAULT_INSTANCE();
+
 ////////////////// DEFINITION DES PADS ////////////////////////////////////
 /*
 Mux  ----------- Arduino
-S0 ------------------- D0
-S1 ------------------- D1
-S2 ------------------- D2
-S3 ------------------- D3
+S0 ------------------- 6
+S1 ------------------- 7
+S2 ------------------- 8
+S3 ------------------- 0
 Z -------------------- A0
  */
 //Define MUX Pins
-HelloDrumMUX_4067 mux(6, 7, 8, 9, A0); //D2, D3, D4, D5, A0
-
+HelloDrumMUX_4067 mux(6, 7, 8, 9, 26); //D2, D3, D4, D5, A0
+//HelloDrumMUX_4067 mux(9, 10, 11, 12, A0); //D2, D3, D4, D5, A0
 
 HelloDrum pad1(0);
 HelloDrum pad2(1);
